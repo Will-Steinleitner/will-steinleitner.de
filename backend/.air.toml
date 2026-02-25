@@ -1,0 +1,27 @@
+root = ".." # Sets the project root (will-steinleitner.de) and watches all project directories
+tmp_dir = "tmp"
+
+[build]
+cmd = "go build -o ./tmp/main ./cmd/server"
+bin = "./tmp/main"  #for linux
+
+#cmd = "go build -o ./tmp/main.exe ./cmd/server"
+#bin = "./tmp/main.exe" #for windows
+
+delay = 200
+exclude_dir = ["tmp/", "backend/tmp", "vendor", ".git"]
+include_ext = ["go", "html", "css", "js", "tmpl", "tpl"]
+poll = true
+poll_interval = 500
+
+[color]
+app = ""
+build = "yellow"
+main = "magenta"
+runner = "green"
+watcher = "cyan"
+
+[proxy]
+enabled = true
+proxy_port = 3000
+app_port = 8090
