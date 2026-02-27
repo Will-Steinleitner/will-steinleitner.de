@@ -16,10 +16,13 @@ func NewHome(renderer *renderer.Renderer) *Home {
 	}
 }
 
-func (h Home) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
+func (h *Home) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
 	switch {
 	case request.Method == http.MethodGet && request.URL.Path == "/":
-		h.renderer.RenderHTML(writer, "index.html")
+
+		h.renderer.RenderHTML(writer, "index.html", struct {
+			Title string
+		}{Title: "Home"})
 		return
 	}
 }
