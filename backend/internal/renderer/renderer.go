@@ -32,8 +32,8 @@ func newHTMLCache() (map[string][]byte, error) {
 
 	wd, err := os.Getwd()
 	log.Println(wd)
-	pages, err := filepath.Glob("web/templates/*")
-	//pages, err := filepath.Glob("../web/templates/*")
+	//pages, err := filepath.Glob("web/templates/*")
+	pages, err := filepath.Glob("../web/templates/*")
 	if err != nil {
 		log.Fatal(rendererTAG, err)
 	}
@@ -49,8 +49,8 @@ func newHTMLCache() (map[string][]byte, error) {
 		cache[name] = content
 	}
 
-	partials, err := filepath.Glob("web/partials/*")
-	//partials, err := filepath.Glob("../web/partials/*")
+	//partials, err := filepath.Glob("web/partials/*")
+	partials, err := filepath.Glob("../web/partials/*")
 	if err != nil {
 		log.Fatal(err)
 	}

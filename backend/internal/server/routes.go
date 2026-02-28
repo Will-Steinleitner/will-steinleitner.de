@@ -1,23 +1,23 @@
 package server
 
 import (
-	"log"
 	"net/http"
-	"os"
 
-	"will-steinleitner.de/internal/handlers"
+	"will-steinleitner.de/internal/server/handlers"
 )
 
-func RegisterRoutes(home *handlers.Home) http.Handler {
-	wd, _ := os.Getwd()
-	log.Println("Working directory", wd)
-
-	fs := http.FileServer(http.Dir("web/static")) // Serves all files from the ./web/static directory over HTTP.
-	//fs := http.FileServer(http.Dir("../web/static")) // Serves all files from the ./web/static directory over HTTP.
+func RegisterRoutes(
+	home *handlers.Home,
+	middleware func(http.Handler) http.Handler,
+) http.Handler {
+	//fs := http.FileServer(http.Dir("web/static")) // Serves all files from the ./web/static directory over HTTP.
+	fs := http.FileServer(http.Dir("../web/static")) // Serves all files from the ./web/static directory over HTTP.
 
 	mux := http.NewServeMux()
-	mux.Handle("/static/", http.StripPrefix("/static/", fs))
-	mux.Handle("/", home) // Forces the implementation of ServeHTTP.
+
+	//pipeline: request  -> logging -> home -> response
+	mux.Handle(http.MethodGet+" /static/", http.StripPrefix("/static/", fs))
+	mux.Handle(http.MethodGet+" /", middleware(home)) // Forces the implementation of ServeHTTP.
 
 	return mux
 }

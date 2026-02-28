@@ -12,6 +12,8 @@ SSH_KEY=/home/will/.ssh/id_hetzner
 SERVER=46.225.218.39
 USER=root
 REMOTE_PATH=/usr/local/bin
+REMOTE_DIR := willweb
+REMOTE_FULL_PATH := $(REMOTE_PATH)/$(REMOTE_DIR)
 
 .PHONY: deps
 deps: ## Install and tidy Go dependencies
@@ -40,17 +42,18 @@ build-linux: ## Build Linux production binary
 	GOOS=$(GOOS) GOARCH=$(GOARCH) CGO_ENABLED=$(CGO_ENABLED) \
 	$(GOCMD) build $(LDFLAGS) -o $(BINARY_DIR)/$(APP_NAME) ./cmd/server/
 
-
-
 .PHONY: deploy
 deploy: build-linux ## Build and copy to server using SSH key
-	scp -i $(SSH_KEY) $(BINARY_DIR)/$(APP_NAME) $(USER)@$(SERVER):$(REMOTE_PATH)/$(APP_NAME)
+	ssh -i $(SSH_KEY) $(USER)@$(SERVER) "mkdir -p '$(REMOTE_FULL_PATH)'"
+
+	scp -i $(SSH_KEY) $(BINARY_DIR)/$(APP_NAME) \
+		$(USER)@$(SERVER):"$(REMOTE_FULL_PATH)/$(APP_NAME)"
 
 	scp -i $(SSH_KEY) -r cmd/server/config \
-		$(USER)@$(SERVER):$(REMOTE_PATH)/
+		$(USER)@$(SERVER):"$(REMOTE_FULL_PATH)/"
 
 	scp -i $(SSH_KEY) -r ../web \
-		$(USER)@$(SERVER):$(REMOTE_PATH)/
+		$(USER)@$(SERVER):"$(REMOTE_FULL_PATH)/"
 
 
 .PHONY: help

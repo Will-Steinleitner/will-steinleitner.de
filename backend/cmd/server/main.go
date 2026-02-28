@@ -22,6 +22,7 @@ func run(
 	log.Println("Starting server at port", app.GetConfig().Port)
 	handler := server.RegisterRoutes(
 		app.GetHome(),
+		app.GetMiddleware(),
 	)
 
 	httpServer := &http.Server{
