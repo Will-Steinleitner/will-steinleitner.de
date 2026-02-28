@@ -30,7 +30,10 @@ func NewRenderer() *Renderer {
 func newHTMLCache() (map[string][]byte, error) {
 	cache := make(map[string][]byte)
 
-	pages, err := filepath.Glob("../web/templates/*")
+	wd, err := os.Getwd()
+	log.Println(wd)
+	pages, err := filepath.Glob("web/templates/*")
+	//pages, err := filepath.Glob("../web/templates/*")
 	if err != nil {
 		log.Fatal(rendererTAG, err)
 	}
@@ -46,7 +49,8 @@ func newHTMLCache() (map[string][]byte, error) {
 		cache[name] = content
 	}
 
-	partials, err := filepath.Glob("../web/partials/*")
+	partials, err := filepath.Glob("web/partials/*")
+	//partials, err := filepath.Glob("../web/partials/*")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -66,7 +70,9 @@ func newHTMLCache() (map[string][]byte, error) {
 
 func (r *Renderer) RenderHTML(w http.ResponseWriter, html string, data interface{}) {
 	content, ok := r.htmlCache[html]
+
 	if !ok {
+		log.Println(html)
 		http.Error(w, "html is missing: "+html, 500)
 		return
 	}

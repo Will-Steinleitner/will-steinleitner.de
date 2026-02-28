@@ -40,9 +40,18 @@ build-linux: ## Build Linux production binary
 	GOOS=$(GOOS) GOARCH=$(GOARCH) CGO_ENABLED=$(CGO_ENABLED) \
 	$(GOCMD) build $(LDFLAGS) -o $(BINARY_DIR)/$(APP_NAME) ./cmd/server/
 
+
+
 .PHONY: deploy
 deploy: build-linux ## Build and copy to server using SSH key
 	scp -i $(SSH_KEY) $(BINARY_DIR)/$(APP_NAME) $(USER)@$(SERVER):$(REMOTE_PATH)/$(APP_NAME)
+
+	scp -i $(SSH_KEY) -r cmd/server/config \
+		$(USER)@$(SERVER):$(REMOTE_PATH)/
+
+	scp -i $(SSH_KEY) -r ../web \
+		$(USER)@$(SERVER):$(REMOTE_PATH)/
+
 
 .PHONY: help
 help:

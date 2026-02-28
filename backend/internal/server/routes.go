@@ -1,13 +1,19 @@
 package server
 
 import (
+	"log"
 	"net/http"
+	"os"
 
 	"will-steinleitner.de/internal/handlers"
 )
 
 func RegisterRoutes(home *handlers.Home) http.Handler {
-	fs := http.FileServer(http.Dir("../web/static")) // Serves all files from the ./web/static directory over HTTP.
+	wd, _ := os.Getwd()
+	log.Println("Working directory", wd)
+
+	fs := http.FileServer(http.Dir("web/static")) // Serves all files from the ./web/static directory over HTTP.
+	//fs := http.FileServer(http.Dir("../web/static")) // Serves all files from the ./web/static directory over HTTP.
 
 	mux := http.NewServeMux()
 	mux.Handle("/static/", http.StripPrefix("/static/", fs))
