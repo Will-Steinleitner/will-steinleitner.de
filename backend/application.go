@@ -19,8 +19,8 @@ type Application struct {
 
 func NewApplication() *Application {
 	cfg := config.NewConfig()
-	//cfg.Load("config/config.yml")
-	cfg.Load("cmd/server/config/config.yml")
+	cfg.Load("config/config.yml")
+	//cfg.Load("cmd/server/config/config.yml")
 
 	r := renderer.NewRenderer()
 
