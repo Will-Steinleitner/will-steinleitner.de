@@ -21,7 +21,7 @@ func run(
 ) error {
 	log.Println("Starting server at port", app.GetConfig().Port)
 	handler := server.RegisterRoutes(
-		app.GetHome(),
+		app.GetRenderer(),
 		app.GetMiddleware(),
 	)
 

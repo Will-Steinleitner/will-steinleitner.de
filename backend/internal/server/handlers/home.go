@@ -6,23 +6,18 @@ import (
 	"will-steinleitner.de/internal/renderer"
 )
 
-type Home struct {
-	renderer *renderer.Renderer
-}
+func HandleHome(r *renderer.Renderer) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
 
-func NewHome(renderer *renderer.Renderer) *Home {
-	return &Home{
-		renderer,
-	}
-}
+		if req.Method == http.MethodGet && req.URL.Path == "/" {
+			r.RenderHTML(w, "index.html", struct {
+				Title string
+			}{
+				Title: "Home",
+			})
+			return
+		}
 
-func (h *Home) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
-	switch {
-	case request.Method == http.MethodGet && request.URL.Path == "/":
-
-		h.renderer.RenderHTML(writer, "index.html", struct {
-			Title string
-		}{Title: "Home"})
-		return
-	}
+		http.NotFound(w, req)
+	})
 }

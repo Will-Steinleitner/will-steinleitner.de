@@ -7,12 +7,11 @@ import (
 
 	"will-steinleitner.de/cmd/server/config"
 	"will-steinleitner.de/internal/renderer"
-	"will-steinleitner.de/internal/server/handlers"
 	"will-steinleitner.de/internal/server/middleware"
 )
 
 type Application struct {
-	home       *handlers.Home
+	renderer   *renderer.Renderer
 	cfg        *config.Config
 	middleware func(handler http.Handler) http.Handler
 }
@@ -28,14 +27,14 @@ func NewApplication() *Application {
 	mw := middleware.New(logger)
 
 	return &Application{
-		home:       handlers.NewHome(r),
+		renderer:   r,
 		cfg:        cfg,
 		middleware: mw,
 	}
 }
 
-func (app *Application) GetHome() *handlers.Home {
-	return app.home
+func (app *Application) GetRenderer() *renderer.Renderer {
+	return app.renderer
 }
 
 func (app *Application) GetConfig() *config.Config {
